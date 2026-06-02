@@ -754,16 +754,36 @@
     renderPage();
   }
 
-  // ── 클릭 사운드 ──────────────────────────────────────────
-  const clickAudio = new Audio('/click.mp3?v=1');
-  clickAudio.preload = 'auto';
+  // ── 클릭 사운드 (Web Audio API — 저지연) ────────────────────
+  let _audioCtx = null;
+  let _clickBuf = null;
+
+  function _initAudio() {
+    if (_audioCtx) return;
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    fetch('/click.mp3?v=' + Date.now())
+      .then(r => r.arrayBuffer())
+      .then(buf => _audioCtx.decodeAudioData(buf))
+      .then(decoded => { _clickBuf = decoded; })
+      .catch(() => {});
+  }
+
   function playClick() {
     try {
-      const s = clickAudio.cloneNode();
-      s.volume = 0.6;
-      s.play().catch(() => {});
+      if (!_audioCtx) _initAudio();
+      if (!_clickBuf) return;
+      if (_audioCtx.state === 'suspended') _audioCtx.resume();
+      const src = _audioCtx.createBufferSource();
+      src.buffer = _clickBuf;
+      const gain = _audioCtx.createGain();
+      gain.gain.value = 0.6;
+      src.connect(gain);
+      gain.connect(_audioCtx.destination);
+      src.start(0);
     } catch(_) {}
   }
+
+  _initAudio(); // 미리 버퍼 로드
 
   // ── 포인터 이벤트 ─────────────────────────────────────────
   function onPointerDown(e, btn, el) {

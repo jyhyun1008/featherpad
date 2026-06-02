@@ -132,7 +132,7 @@ const httpServer = http.createServer((req, res) => {
     return;
   }
 
-  if (req.url === "/click.mp3?v=1") {
+  if (req.url.startsWith("/click.mp3")) {
     fs.readFile(path.join(__dirname, "click.mp3"), (err, data) => {
       if (err) { res.writeHead(404); res.end(); return; }
       res.writeHead(200, { "Content-Type": "audio/mpeg", "Cache-Control": "no-store" });
