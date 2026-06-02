@@ -1,0 +1,8 @@
+.claude/
+node_modules/
+FeatherPad.app/
+buttons.js
+.DS_Store
+_FeatherPad.iconset/
+*.log
+set-icon.sh

@@ -1,0 +1,12 @@
+{
+  "name": "FeatherPad",
+  "version": "1.0.0",
+  "description": "웹 기반 스트림덱 클론 (Mac용)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
