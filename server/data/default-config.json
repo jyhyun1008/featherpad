@@ -1,0 +1,23 @@
+{
+  "pages": [
+    {
+      "id": "page-0",
+      "name": "Page 1",
+      "buttons": [
+        { "id": "safari", "label": "Safari", "icon": "tabler:world", "image": "", "action": "app", "value": "Safari" },
+        { "id": "terminal", "label": "Terminal", "icon": "tabler:terminal-2", "image": "", "action": "app", "value": "Terminal" },
+        { "id": "vscode", "label": "VS Code", "icon": "tabler:brand-vscode", "image": "", "action": "app", "value": "Visual Studio Code" },
+        { "id": "notes", "label": "Notes", "icon": "tabler:notes", "image": "", "action": "app", "value": "Notes" },
+        { "id": "finder", "label": "Finder", "icon": "tabler:folder-open", "image": "", "action": "app", "value": "Finder" },
+        { "id": "spotify", "label": "Spotify", "icon": "tabler:brand-spotify", "image": "", "action": "app", "value": "Spotify" },
+        { "id": "vol_up", "label": "볼륨 +", "icon": "tabler:volume", "image": "", "action": "volume", "value": "up" },
+        { "id": "vol_down", "label": "볼륨 -", "icon": "tabler:volume-2", "image": "", "action": "volume", "value": "down" },
+        { "id": "vol_mute", "label": "음소거", "icon": "tabler:volume-off", "image": "", "action": "volume", "value": "mute" },
+        { "id": "screenshot", "label": "스크린샷", "icon": "tabler:screenshot", "image": "", "action": "shortcut", "value": "cmd+shift+5" },
+        { "id": "lock", "label": "화면잠금", "icon": "tabler:lock", "image": "", "action": "shortcut", "value": "ctrl+cmd+q" },
+        { "id": "spotlight", "label": "Spotlight", "icon": "tabler:search", "image": "", "action": "shortcut", "value": "cmd+space" }
+      ]
+    }
+  ],
+  "pinnedKeys": [null, null, null]
+}

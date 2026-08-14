@@ -1,12 +1,20 @@
 {
-  "name": "FeatherPad",
-  "version": "1.0.0",
-  "description": "웹 기반 스트림덱 클론 (Mac용)",
-  "main": "server.js",
+  "name": "FeatherDeck",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "start": "node server.js"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "ws": "^8.18.0"
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.41",
+    "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "@vite-pwa/nuxt": "^1.1.1"
   }
 }

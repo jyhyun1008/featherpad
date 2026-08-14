@@ -1,8 +1,25 @@
-.claude/
-node_modules/
-FeatherPad.app/
-buttons.js
-.DS_Store
-_FeatherPad.iconset/
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
 *.log
-set-icon.sh
+
+# Misc
+.DS_Store
+.fleet
+.idea
+.claude/
+
+# Local env files
+.env
+.env.*
+!.env.example
