@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ButtonDef, PadConfig, PadPage } from '../../server/utils/store'
 
-const ACTIONS: ButtonDef['action'][] = ['app', 'shortcut', 'url', 'file', 'volume', 'page']
-const PRE_ACTIONS: ButtonDef['preAction'][] = ['', 'app', 'shortcut', 'url', 'file', 'volume']
+const ACTIONS: ButtonDef['action'][] = ['app', 'shortcut', 'url', 'file', 'volume', 'clipboard', 'page']
+const PRE_ACTIONS: ButtonDef['preAction'][] = ['', 'app', 'shortcut', 'url', 'file', 'volume', 'clipboard']
 
 const { url } = useServerUrl()
 const { apiFetch } = useApi()
@@ -273,7 +273,7 @@ onMounted(() => {
                   <option value="" disabled>이동할 페이지 선택</option>
                   <option v-for="p in pages" :key="p.id" :value="p.id">{{ p.name }}</option>
                 </select>
-                <input v-else v-model="current.value" type="text" placeholder="예: Safari · cmd+shift+5 · https://…">
+                <input v-else v-model="current.value" type="text" placeholder="예: Safari · cmd+shift+5 · https://… · 복사할 텍스트">
               </div>
 
               <template v-if="current.action === 'page'">

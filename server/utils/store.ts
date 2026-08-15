@@ -8,7 +8,7 @@ import defaultConfig from '../data/default-config.json'
 export const PAGE_KEY_COUNT = 12 // 페이지마다 바뀌는 칸
 export const PINNED_KEY_COUNT = 3 // 우하단 3칸 — 모든 페이지에서 항상 같은 버튼(뭘 넣을지는 자유)
 
-export type RealAction = 'app' | 'volume' | 'shortcut' | 'url' | 'file'
+export type RealAction = 'app' | 'volume' | 'shortcut' | 'url' | 'file' | 'clipboard'
 
 export interface ButtonDef {
   id: string

@@ -105,7 +105,15 @@ npm run generate   # .output/public 생성 — Vercel/Netlify 등 아무 정적 
 | `volume` | `"up"` / `"down"` / `"mute"` | 볼륨 조절 |
 | `url` | `"https://github.com"` | URL 열기 |
 | `file` | `"/Users/me/doc.pdf"` | 파일/폴더 열기 |
+| `clipboard` | `"복사할 텍스트"` | Mac 클립보드로 복사 — 자주 쓰는 문구/이메일 등 |
 | `page` | 이동할 페이지의 `id` | **폴더 버튼** — 아래 참고 |
+
+`clipboard`는 `pbcopy`가 아니라 `osascript`(System Events)로 구현되어 있습니다 — `pbcopy`는
+launchd로 띄운 서버에선 조용히 성공만 하고 실제로는 클립보드가 안 바뀌는 걸 확인해서(pasteboard
+서버에 못 붙는 것으로 보임) 이미 다른 액션(volume/shortcut)에 쓰던 osascript 경로로 바꿨습니다.
+값은 AppleScript 소스에 직접 끼워넣지 않고 임시 파일(UTF-8)에 써뒀다가 그 경로만 읽게 해서
+(`server/utils/actions.ts`) 따옴표/`$()`/백틱 같은 게 들어있어도 실행될 일이 없고, 한글·이모지도
+깨지지 않습니다. 다만 `config.json`은 평문 파일이라 — 비밀번호처럼 민감한 값을 넣는 용도로는 안 맞아요.
 
 ### 페이지 = 폴더
 

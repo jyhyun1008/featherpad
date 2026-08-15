@@ -1,5 +1,8 @@
-import { exec } from 'node:child_process'
-import { platform } from 'node:os'
+import { exec, spawn } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
+import { rm, writeFile } from 'node:fs/promises'
+import { platform, tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 // modifier / 특수키 매핑 (legacy/server.js 그대로 이식)
 const MOD_MAP: Record<string, string> = {
@@ -56,6 +59,30 @@ export async function runAction(action: string, value: string) {
 
     case 'file':
       return run(`open "${value}"`)
+
+    case 'clipboard': {
+      // pbcopy는 launchd(gui/<uid>) 에이전트에서 실행하면 pasteboard 서버에 붙지 못해
+      // 조용히 성공만 하고 실제로는 복사가 안 되는 걸 실측으로 확인함 — 대신 System Events
+      // 경로(osascript)를 쓰면 launchd에서도 잘 됨(volume/shortcut 액션이 이미 그 경로로 동작 중).
+      //
+      // value는 AppleScript 소스에 직접 끼워넣지 않고(따옴표/injection 걱정 없게) 임시 파일에
+      // UTF-8로 써두고 그 경로만 읽게 함 — env var(system attribute)로 넘겼더니 한글/이모지가
+      // 깨져서(AppleScript가 env var를 UTF-8로 안 읽음) 이 방식으로 바꿈. 파일 읽을 때
+      // «class utf8»로 인코딩을 명시해야 깨지지 않음. 경로는 서버가 만든 랜덤 이름이라
+      // 이 부분만은 문자열로 끼워넣어도 안전함(사용자 입력이 아님).
+      const tmpPath = join(tmpdir(), `featherdeck-clip-${randomUUID()}.txt`)
+      await writeFile(tmpPath, value, 'utf-8')
+      try {
+        await new Promise<void>((resolve, reject) => {
+          const proc = spawn('osascript', ['-e', `set the clipboard to (read (POSIX file "${tmpPath}") as «class utf8»)`])
+          proc.on('error', reject)
+          proc.on('close', code => (code === 0 ? resolve() : reject(new Error(`osascript exited with code ${code}`))))
+        })
+      } finally {
+        await rm(tmpPath, { force: true }).catch(() => {})
+      }
+      return
+    }
 
     default:
       throw new Error(`알 수 없는 액션: ${action}`)
