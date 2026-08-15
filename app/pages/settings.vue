@@ -71,6 +71,36 @@ function deleteCurrentPage() {
   pages.value.splice(currentIndex.value, 1)
 }
 
+// 페이지 탭 드래그 정렬 (데스크탑 마우스 전제 — 네이티브 HTML5 DnD, 터치 지원 없음)
+const draggingIndex = ref<number | null>(null)
+
+function onDragStart(i: number, e: DragEvent) {
+  draggingIndex.value = i
+  e.dataTransfer?.setData('text/plain', String(i))
+  if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move'
+}
+
+function onDragOver(e: DragEvent) {
+  e.preventDefault()
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'move'
+}
+
+function onDrop(i: number) {
+  const from = draggingIndex.value
+  draggingIndex.value = null
+  if (from === null || from === i) return
+
+  const activeId = currentPage.value?.id
+  const [moved] = pages.value.splice(from, 1)
+  pages.value.splice(i, 0, moved)
+
+  // 옮기고 나서도 보고 있던 페이지가 그대로 화면에 남아있게 인덱스 보정
+  if (activeId) {
+    const newIndex = pages.value.findIndex(p => p.id === activeId)
+    if (newIndex !== -1) goToIndex(newIndex)
+  }
+}
+
 watch(currentIndex, () => {
   selectedIndex.value = null
   renamingIndex.value = null
@@ -173,9 +203,14 @@ onMounted(() => {
               :key="p.id"
               type="button"
               class="page-tab"
-              :class="{ active: i === currentIndex }"
+              :class="{ active: i === currentIndex, dragging: draggingIndex === i }"
+              :draggable="renamingIndex !== i"
               @click="goToIndex(i)"
               @dblclick="renamingIndex = i"
+              @dragstart="onDragStart(i, $event)"
+              @dragover="onDragOver"
+              @drop="onDrop(i)"
+              @dragend="draggingIndex = null"
             >
               <input
                 v-if="renamingIndex === i"

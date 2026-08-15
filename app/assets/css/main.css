@@ -515,11 +515,15 @@ select {
   color: var(--text-dim);
   padding: 6px 14px;
   font-size: 12.5px;
-  cursor: pointer;
+  cursor: grab;
 }
 
 .page-tab:hover {
   background: var(--glass-hover);
+}
+
+.page-tab.dragging {
+  opacity: 0.4;
 }
 
 .page-tab.active {
